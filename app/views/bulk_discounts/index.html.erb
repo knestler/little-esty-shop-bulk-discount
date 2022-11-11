@@ -1,1 +1,30 @@
-<h1> Bulk Discounts Index Page </h1>
+<!DOCTYPE html>
+<html>
+<style>
+.flex_container {
+    display: flex;
+}
+.flex_child {
+    flex: 1;
+    border: 2px
+}
+
+.flex_child:first-child {
+    margin-right: 20px;
+}
+</style>
+
+<nav>
+<%= render partial: 'layouts/merchants_header', locals: { merch_name: @merchant.name, merch_id: @merchant.id }%>
+</nav>
+
+
+<h1> Bulk Discounts: </h1>
+
+<div id = "bulk_discounts">
+  <%@merchant.bulk_discounts.each do |discount|%>
+    <p><b><%=link_to "Discount: #{discount.id}", merchant_bulk_discounts_path(@merchant, discount)%></b>&nbsp&nbsp&nbsp&nbsp
+    <%="Percentage Discount: %#{discount.percentage_discount}"%>&nbsp&nbsp&nbsp&nbsp
+    <%="Quantity Needed: #{discount.quantity_threshold} ct."%></p>
+  <%end%>
+</div>
