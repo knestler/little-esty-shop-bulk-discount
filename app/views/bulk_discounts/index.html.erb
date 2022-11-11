@@ -26,5 +26,6 @@
     <p><b><%=link_to "Discount: #{discount.id}", merchant_bulk_discounts_path(@merchant, discount)%></b>&nbsp&nbsp&nbsp&nbsp
     <%="Percentage Discount: %#{discount.percentage_discount}"%>&nbsp&nbsp&nbsp&nbsp
     <%="Quantity Needed: #{discount.quantity_threshold} ct."%></p>
-  <%end%>
+  <%end%><br>
 </div>
+  <p><%=link_to "Create New Discount", new_merchant_bulk_discount_path(@merchant) %></p>

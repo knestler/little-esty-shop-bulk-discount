@@ -66,7 +66,7 @@ RSpec.describe 'bulk discount index page' do
   describe 'visit merchant bulk discount index' do
     it 'shows the name of my merchant and discount information' do
       visit merchant_bulk_discounts_path(nomi)
-      save_and_open_page
+
       expect(page).to have_content('Naomi LLC')
       expect(page).to have_content("Discount: #{bulk_discount_1.id}")
       expect(page).to have_content("Percentage Discount: %#{bulk_discount_1.percentage_discount}")
@@ -74,15 +74,15 @@ RSpec.describe 'bulk discount index page' do
       expect(page).to have_content("Discount: #{bulk_discount_2.id}")
       expect(page).to have_content("Percentage Discount: %#{bulk_discount_2.percentage_discount}")
       expect(page).to have_content("Quantity Needed: #{bulk_discount_2.quantity_threshold} ct.")
-      # expect(page).to have_content(bulk_discount_3.id)
-      # expect(page).to have_content(bulk_discount_3.percentage_discount)
-      # expect(page).to have_content(bulk_discount_3.quantity_threshold)
-      # expect(page).to have_content(bulk_discount_4.id)
-      # expect(page).to have_content(bulk_discount_4.percentage_discount)
-      # expect(page).to have_content(bulk_discount_4.quantity_threshold)
-
     end
 
+    it 'has a link to create a new discount' do 
+      visit merchant_bulk_discounts_path(nomi)
+
+      click_link("Create New Discount")
+
+      expect(current_path).to eq(new_merchant_bulk_discount_path(nomi))
+    end
 
   end
 end
