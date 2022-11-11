@@ -44,3 +44,8 @@ nomi = Merchant.create!(name: "Naomi LLC")
 @transaction_4 = Transaction.create!(credit_card_number: 2222222222222222, credit_card_expiration_date: "01/11", result: "success", invoice_id: @invoice_4.id)
 @transaction_5 = Transaction.create!(credit_card_number: 3333333333333333, credit_card_expiration_date: "01/21", result: "success", invoice_id: @invoice_5.id)
 @transaction_6 = Transaction.create!(credit_card_number: 3333333333333333, credit_card_expiration_date: "01/21", result: "success", invoice_id: @invoice_6.id)
+
+@bulk_discount_1 = @merchant_1.bulk_discounts.create!(percentage_discount: 10, quantity_threshold: 10) 
+@bulk_discount_2 = @merchant_1.bulk_discounts.create!(percentage_discount: 15, quantity_threshold: 5) 
+@bulk_discount_3 = @merchant_2.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 10) 
+@bulk_discount_4 = @merchant_3.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 15) 
