@@ -71,7 +71,7 @@ RSpec.describe 'Bulk discounts show page' do
       expect(page).to have_content('Naomi LLC')
       expect(page).to have_content("Bulk Discount: ##{bulk_discount_1.id}")
       expect(page).to have_content("Percentage Discount: #{bulk_discount_1.percentage_discount}%")
-      expect(page).to have_content("Quantity Needed: #{bulk_discount_1.quantity_threshold} ct.")
+      expect(page).to have_content("Quantity Needed: #{bulk_discount_1.quantity_threshold}")
     end
   end
 
