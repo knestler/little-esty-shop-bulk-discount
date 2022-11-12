@@ -84,5 +84,15 @@ RSpec.describe 'bulk discount index page' do
       expect(current_path).to eq(new_merchant_bulk_discount_path(nomi))
     end
 
+    it 'has links to delete each specific discount' do 
+      visit merchant_bulk_discounts_path(nomi)
+      
+      within("#bulk_discounts-#{bulk_discount_1.id}") do
+        # expect(page).to have_button('Delete')
+        click_button('Delete')
+      end
+      save_and_open_page
+      expect(current_path).to eq(merchant_bulk_discounts_path(nomi))
+    end
   end
 end

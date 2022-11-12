@@ -62,15 +62,18 @@ RSpec.describe "admin merchant new bulk discount  page" do
   let!(:bulk_discount_3) {tyty.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 10) }
   let!(:bulk_discount_4) {tyty.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 15) }
 
-  it "can create new merchant" do
+  it "can verify all fields have informaiton before creating new merchant" do
     visit new_merchant_bulk_discount_path(nomi)
 
     expect(page).to have_content("New Discount")
 
     fill_in :percentage_discount, with: 25
     fill_in :quantity_threshold, with: ' '
-
+    
+    click_on "Create"
+    
     expect(current_path).to eq(new_merchant_bulk_discount_path(nomi))
+    expect(page).to have_content("Fields can't be left blank")
 
     fill_in :percentage_discount, with: 25
     fill_in :quantity_threshold, with: 20
