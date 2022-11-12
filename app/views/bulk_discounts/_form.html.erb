@@ -1,0 +1,11 @@
+<%= form_with url: path, method: method, local: true do |form| %>
+  Id: <%=@discount.id%><br><br> 
+
+  <%= form.label :percentage_discount %>
+  <%= form.number_field :percentage_discount, value: fill_in_percentage_discount %><br><br>
+
+  <%= form.label :quantity_threshold %>
+  <%= form.number_field :quantity_threshold, value: fill_in_quantity_threshold %><br><br>
+
+  <%= form.submit button_text %>
+<% end %>

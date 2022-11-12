@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Bulk discounts show page' do
+RSpec.describe 'bulk discount edit page' do
   let!(:nomi) {Merchant.create!(name: "Naomi LLC")}
   let!(:tyty) {Merchant.create!(name: "TyTy's Grub")}
   
@@ -61,28 +61,36 @@ RSpec.describe 'Bulk discounts show page' do
   let!(:bulk_discount_2) {nomi.bulk_discounts.create!(percentage_discount: 15, quantity_threshold: 5) }
   let!(:bulk_discount_3) {tyty.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 10) }
   let!(:bulk_discount_4) {tyty.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 15) }
-
-  describe 'bulk discount show page' do
-    it 'has bulk discounts quantity threshold and percentage discount' do
-    visit merchant_bulk_discount_path(nomi, bulk_discount_1)
-
-      expect(page).to have_content('Naomi LLC')
-      expect(page).to have_content("Bulk Discount: ##{bulk_discount_1.id}")
-      expect(page).to have_content("Percentage Discount: #{bulk_discount_1.percentage_discount}%")
-      expect(page).to have_content("Quantity Needed: #{bulk_discount_1.quantity_threshold}")
+  
+  describe 'bulk discount edit page' do
+    it ' shows a form with existing bulk discount attributes' do
+      visit edit_merchant_bulk_discount_path(nomi, bulk_discount_1)
+      
+      expect(page).to have_content("Id: #{bulk_discount_1.id}")
+      expect(page).to have_field(:percentage_discount, with: bulk_discount_1.percentage_discount)
+      expect(page).to have_field(:quantity_threshold, with: bulk_discount_1.quantity_threshold)
     end
+    
+    it "redirects back to bulk discounts show page with updated info" do
+      visit edit_merchant_bulk_discount_path(nomi, bulk_discount_1)
+      fill_in :percentage_discount, with: 25
+      fill_in :quantity_threshold, with: " "
+      click_button "Update Discount"
 
-    it 'has a link to edit the bulk discount via new page with a form' do
-      visit merchant_bulk_discount_path(nomi, bulk_discount_1)
+      expect(current_path).to eq("/merchants/#{nomi.id}/bulk_discounts/#{bulk_discount_1.id}/edit")
+      expect(page).to have_content("Fields can't be left blank")
 
-      expect(page).to have_link("Edit Discount")
-
-      click_link("Edit Discount")
-
-      expect(current_path).to eq(edit_merchant_bulk_discount_path(nomi, bulk_discount_1))
+      fill_in :percentage_discount, with: 30
+      fill_in :quantity_threshold, with: 50
+      click_button "Update Discount"
+      
+      expect(current_path).to eq("/merchants/#{nomi.id}/bulk_discounts/#{bulk_discount_1.id}")
+      expect(page).to have_content("Naomi LLC")
+      expect(page).to_not have_field("Name", with: tyty.id)
+      expect(page).to have_content(bulk_discount_1.id)
+      expect(page).to have_content("Percentage Discount: 30")
+      expect(page).to have_content("Quantity Needed: 50")
     end
-
 
   end
-
 end

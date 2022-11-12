@@ -1,0 +1,12 @@
+<%= render partial: 'layouts/merchants_header', locals: { 
+  merch_name: @merchant.name,
+  merch_id: @merchant.id 
+} %>
+
+<%= render partial: 'form', locals: {
+  path: "/merchants/#{@merchant.id}/bulk_discounts/#{@discount.id}",
+  method: :patch,
+  fill_in_percentage_discount: @discount.percentage_discount,
+  fill_in_quantity_threshold: @discount.quantity_threshold,
+  button_text: 'Update Discount'
+} %>
