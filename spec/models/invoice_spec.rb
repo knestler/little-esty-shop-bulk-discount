@@ -80,18 +80,21 @@ RSpec.describe Invoice, type: :model do
     describe '#admin_total_revenue' do
       it 'returns the total revenue for a specific merchant' do
         expect(invoice_1.my_total_revenue).to eq(59980)
+        expect(invoice_6.discounted_revenue).to eq(1600)
       end
     end
 
     describe '#discounted_amount' do 
       it 'returns highest applicable discounted amount' do
         expect(invoice_1.discounted_amount).to eq(8997)
+        expect(invoice_6.discounted_amount).to eq(0)
       end
     end
 
     describe '#discounted_revenue' do
       it 'returns the total discounted revenue' do
         expect(invoice_1.discounted_revenue).to eq(50983)
+        expect(invoice_6.discounted_revenue).to eq(1600)
       end
     end
   end

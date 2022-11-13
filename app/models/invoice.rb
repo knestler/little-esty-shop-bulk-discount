@@ -17,7 +17,7 @@ class Invoice < ApplicationRecord
   end
 
   def my_total_revenue_formatter
-    "%.2f" % my_total_revenue#
+    "%.2f" % my_total_revenue
   end
 
   def self.incomplete_invoices
