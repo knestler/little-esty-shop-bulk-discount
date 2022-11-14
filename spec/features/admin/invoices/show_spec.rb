@@ -52,6 +52,7 @@ require 'rails_helper'
         expect(page).to have_content("Status: #{invoice_1.status}")
         expect(page).to have_content("Created on: Thursday, November 03, 2022")
         expect(page).to have_content("Total Revenue: $#{invoice_1.my_total_revenue}")
+        expect(page).to have_content("Total Discounted Revenue: $#{invoice_1.discounted_revenue}")        
         expect(page).to have_content("#{luffy.first_name} #{luffy.last_name}")
       end
     end

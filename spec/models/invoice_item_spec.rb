@@ -61,7 +61,8 @@ RSpec.describe InvoiceItem, type: :model do
   let!(:bulk_discount_2) {nomi.bulk_discounts.create!(percentage_discount: 15, quantity_threshold: 20) }
   let!(:bulk_discount_3) {tyty.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 10) }
   let!(:bulk_discount_4) {tyty.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 15) }
-  
+  let!(:bulk_discount_5) {nomi.bulk_discounts.create!(percentage_discount: 0, quantity_threshold: 0) }
+
   describe 'relationships' do
     it {should belong_to(:invoice)}
     it {should belong_to(:item)}
