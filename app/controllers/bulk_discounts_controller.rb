@@ -32,6 +32,23 @@ class BulkDiscountsController < ApplicationController
 
   end
 
+  def edit
+    @merchant = Merchant.find(params[:merchant_id])
+    @discount = BulkDiscount.find(params[:id])
+  end
+
+  def update
+    @merchant = Merchant.find(params[:merchant_id])
+    @discount = BulkDiscount.find(params[:id])
+
+    if @discount.update(discount_params)
+      redirect_to merchant_bulk_discount_path(@merchant, @discount)
+    else  
+      redirect_to edit_merchant_bulk_discount_path(@merchant, @discount)
+      flash.alert= "Fields can't be left blank"
+    end
+  end
+
   private
     def discount_params
       params.permit(:percentage_discount, :quantity_threshold)

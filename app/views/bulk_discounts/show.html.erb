@@ -18,9 +18,10 @@
 <%= render partial: 'layouts/merchants_header', locals: { merch_name: @merchant.name, merch_id: @merchant.id }%>
 </nav>
 
-
 <h1> Bulk Discount: #<%=@discount.id%> </h1>
   <div id = "bulk_discounts-<%=@discount.id%>">
     <p><b>Percentage Discount: </b> <%="#{@discount.percentage_discount}%"%>&nbsp&nbsp&nbsp&nbsp
     <b>Quantity Needed: </b> <%="#{@discount.quantity_threshold}"%></p>
   </div><br>
+
+   <%= link_to "Edit Discount", edit_merchant_bulk_discount_path(@merchant.id, @discount.id)%>
