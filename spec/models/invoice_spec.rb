@@ -16,8 +16,8 @@ RSpec.describe Invoice, type: :model do
   let!(:invoice_5) {nami.invoices.create!(status: 2)}
   let!(:invoice_6) {sanji.invoices.create!(status: 2)}
 
-  let!(:invoice_item_1)  {InvoiceItem.create!(item_id: lamp.id, invoice_id: invoice_1.id, quantity: 2, unit_price: 2999, status: "shipped")}
-  let!(:invoice_item_2)  {InvoiceItem.create!(item_id: lamp.id, invoice_id: invoice_3.id, quantity: 1, unit_price: 2999, status: "packaged")}
+  let!(:invoice_item_1)  {InvoiceItem.create!(item_id: lamp.id, invoice_id: invoice_1.id, quantity: 20, unit_price: 2999, status: "shipped")}
+  let!(:invoice_item_2)  {InvoiceItem.create!(item_id: lamp.id, invoice_id: invoice_3.id, quantity: 15, unit_price: 2999, status: "packaged")}
   let!(:invoice_item_3)  {InvoiceItem.create!(item_id: lamp.id, invoice_id: invoice_5.id, quantity: 2, unit_price: 2999, status: "packaged")}
   let!(:invoice_item_4)  {InvoiceItem.create!(item_id: stickers.id, invoice_id: invoice_6.id, quantity: 5, unit_price: 100, status: "shipped")}
   let!(:invoice_item_5)  {InvoiceItem.create!(item_id: stickers.id, invoice_id: invoice_6.id, quantity: 1, unit_price: 100, status: "shipped")}
@@ -34,6 +34,11 @@ RSpec.describe Invoice, type: :model do
   let!(:shirt) {tyty.items.create!(name: "Funny Shirt", description: "nice", unit_price: 1099)}
   let!(:pants) {tyty.items.create!(name: "Pants", description: "nice", unit_price: 2010)}
 
+  let!(:bulk_discount_1) {nomi.bulk_discounts.create!(percentage_discount: 10, quantity_threshold: 10) }
+  let!(:bulk_discount_2) {nomi.bulk_discounts.create!(percentage_discount: 15, quantity_threshold: 20) }
+  let!(:bulk_discount_3) {tyty.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 10) }
+  let!(:bulk_discount_4) {tyty.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 15) }
+  
   describe 'relationships' do
     it {should belong_to(:customer)}
     it {should have_many(:invoice_items)}
@@ -62,19 +67,34 @@ RSpec.describe Invoice, type: :model do
   describe 'instance methods' do
     describe '#my_total_revenue' do
       it 'returns the total revenue for a specific merchant' do
-        expect(invoice_1.my_total_revenue(nomi)).to eq(5998)
+        expect(invoice_1.my_total_revenue).to eq(59980)
       end
     end
 
     describe '#my_total_revenue_formatter' do
       it 'formats the total revenue to have two decimal places' do
-        expect(invoice_1.my_total_revenue_formatter(nomi)).to eq("5998.00")
+        expect(invoice_1.my_total_revenue_formatter).to eq("59980.00")
       end
     end
 
     describe '#admin_total_revenue' do
       it 'returns the total revenue for a specific merchant' do
-        expect(invoice_1.admin_total_revenue(invoice_1)).to eq(5998)
+        expect(invoice_1.my_total_revenue).to eq(59980)
+        expect(invoice_6.discounted_revenue).to eq(1600)
+      end
+    end
+
+    describe '#discounted_amount' do 
+      it 'returns highest applicable discounted amount' do
+        expect(invoice_1.discounted_amount).to eq(8997)
+        expect(invoice_6.discounted_amount).to eq(0)
+      end
+    end
+
+    describe '#discounted_revenue' do
+      it 'returns the total discounted revenue' do
+        expect(invoice_1.discounted_revenue).to eq(50983)
+        expect(invoice_6.discounted_revenue).to eq(1600)
       end
     end
   end

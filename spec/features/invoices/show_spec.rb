@@ -31,7 +31,6 @@ RSpec.describe 'Invoice Show Page', type: :feature do
   let!(:invoice_item_7)  {InvoiceItem.create!(item_id: orion.id, invoice_id: invoice_11.id, quantity: 1, unit_price: 1000, status: "shipped")}
   let!(:invoice_item_8)  {InvoiceItem.create!(item_id: oil.id, invoice_id: invoice_11.id, quantity: 10, unit_price: 2599, status: "shipped")}
   let!(:invoice_item_9)  {InvoiceItem.create!(item_id: pants.id, invoice_id: invoice_2.id, quantity: 1, unit_price: 2100, status: "shipped")}
-  
 
   let!(:stickers) {nomi.items.create!(name: "Anime Stickers", description: "Random One Piece and Death Note stickers", unit_price: 599)}
   let!(:lamp) {nomi.items.create!(name: "Lava Lamp", description: "Special blue/purple wax inside a glass vessel", unit_price: 2000)}
@@ -50,7 +49,8 @@ RSpec.describe 'Invoice Show Page', type: :feature do
       within ("#info") do
         expect(page).to have_content("Status: #{invoice_1.status}")
         expect(page).to have_content("Created on: Thursday, November 03, 2022")
-        expect(page).to have_content("Total Revenue: $#{invoice_1.my_total_revenue(nomi)}")
+        expect(page).to have_content("Total Revenue: $#{invoice_1.my_total_revenue}")
+        expect(page).to have_content("Total Discounted Revenue: $#{invoice_1.discounted_revenue}")        
         expect(page).to have_content("#{luffy.first_name} #{luffy.last_name}")
       end
     end

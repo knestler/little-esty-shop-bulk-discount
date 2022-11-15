@@ -12,26 +12,27 @@ class Invoice < ApplicationRecord
     distinct
   end
 
-  def my_total_revenue(merchant)
-    invoice_items.joins(:item)
-                  .where(invoice_items: {invoice_id: self.id})
-                  .where(items: {merchant_id: merchant.id})
-                  .sum('invoice_items.unit_price * invoice_items.quantity')
+  def my_total_revenue
+    invoice_items.sum('unit_price * quantity')
   end
 
-  def my_total_revenue_formatter(merchant)
-    "%.2f" % my_total_revenue(merchant)
-  end
-
-  def admin_total_revenue(invoice_name)
-    invoice_items.joins(:invoice)
-    .where(invoice_items: {invoice_id: self.id})
-    .where(invoices: {id: invoice_name.id})
-    .sum('invoice_items.unit_price * invoice_items.quantity')
+  def my_total_revenue_formatter
+    "%.2f" % my_total_revenue
   end
 
   def self.incomplete_invoices
     joins(:invoice_items).where("invoice_items.status != ?", 2).distinct.order(:created_at)
   end
 
+  def discounted_amount
+    invoice_items.joins(item: [merchant: :bulk_discounts])
+    .select('MAX(invoice_items.unit_price * invoice_items.quantity * bulk_discounts.percentage_discount/100.00) as max_discount')
+    .where('invoice_items.quantity >= bulk_discounts.quantity_threshold')
+    .group(:id)
+    .sum(&:max_discount)
+  end
+
+  def discounted_revenue
+    my_total_revenue - discounted_amount
+  end
 end
