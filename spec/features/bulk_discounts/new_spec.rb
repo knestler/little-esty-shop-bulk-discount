@@ -1,7 +1,6 @@
+require "rails_helper"
 
-require 'rails_helper'
-
-RSpec.describe 'bulk discount index page' do
+RSpec.describe "admin merchant new bulk discount  page" do
   let!(:nomi) {Merchant.create!(name: "Naomi LLC")}
   let!(:tyty) {Merchant.create!(name: "TyTy's Grub")}
   
@@ -62,27 +61,29 @@ RSpec.describe 'bulk discount index page' do
   let!(:bulk_discount_2) {nomi.bulk_discounts.create!(percentage_discount: 15, quantity_threshold: 5) }
   let!(:bulk_discount_3) {tyty.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 10) }
   let!(:bulk_discount_4) {tyty.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 15) }
-  
-  describe 'visit merchant bulk discount index' do
-    it 'shows the name of my merchant and discount information' do
-      visit merchant_bulk_discounts_path(nomi)
-      save_and_open_page
-      expect(page).to have_content('Naomi LLC')
-      expect(page).to have_content("Discount: #{bulk_discount_1.id}")
-      expect(page).to have_content("Percentage Discount: %#{bulk_discount_1.percentage_discount}")
-      expect(page).to have_content("Quantity Needed: #{bulk_discount_1.quantity_threshold} ct.")
-      expect(page).to have_content("Discount: #{bulk_discount_2.id}")
-      expect(page).to have_content("Percentage Discount: %#{bulk_discount_2.percentage_discount}")
-      expect(page).to have_content("Quantity Needed: #{bulk_discount_2.quantity_threshold} ct.")
-      # expect(page).to have_content(bulk_discount_3.id)
-      # expect(page).to have_content(bulk_discount_3.percentage_discount)
-      # expect(page).to have_content(bulk_discount_3.quantity_threshold)
-      # expect(page).to have_content(bulk_discount_4.id)
-      # expect(page).to have_content(bulk_discount_4.percentage_discount)
-      # expect(page).to have_content(bulk_discount_4.quantity_threshold)
 
-    end
+  it "can verify all fields have informaiton before creating new merchant" do
+    visit new_merchant_bulk_discount_path(nomi)
 
+    expect(page).to have_content("New Discount")
 
+    fill_in :percentage_discount, with: 25
+    fill_in :quantity_threshold, with: ' '
+    
+    click_on "Create"
+    
+    expect(current_path).to eq(new_merchant_bulk_discount_path(nomi))
+    expect(page).to have_content("Fields can't be left blank")
+
+    fill_in :percentage_discount, with: 25
+    fill_in :quantity_threshold, with: 20
+
+    click_button "Create"
+
+    expect(current_path).to eq(merchant_bulk_discounts_path(nomi))
+    expect(page).to have_content("Naomi LLC")
+    expect(page).to have_content("%25")
+    expect(page).to have_content("20 ct.")
+    expect(Merchant.last.status).to eq("disabled")
   end
 end
