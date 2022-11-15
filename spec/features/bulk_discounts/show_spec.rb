@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'merchant dashboard show page' do
+RSpec.describe 'Bulk discounts show page' do
   let!(:nomi) {Merchant.create!(name: "Naomi LLC")}
   let!(:tyty) {Merchant.create!(name: "TyTy's Grub")}
   
@@ -56,9 +56,23 @@ RSpec.describe 'merchant dashboard show page' do
   let!(:transaction_11) {Transaction.create!(credit_card_number: 2000000000000000, credit_card_expiration_date: "01/21", result: "success", invoice_id: invoice_11.id)}
   let!(:transaction_12) {Transaction.create!(credit_card_number: 2000000000000000, credit_card_expiration_date: "01/21", result: "failed", invoice_id: invoice_12.id)}
   let!(:transaction_13) {Transaction.create!(credit_card_number: 3333333333333333, credit_card_expiration_date: "01/21", result: "success", invoice_id: invoice_13.id)}
-  
-  describe '' do
-    
+
+  let!(:bulk_discount_1) {nomi.bulk_discounts.create!(percentage_discount: 10, quantity_threshold: 10) }
+  let!(:bulk_discount_2) {nomi.bulk_discounts.create!(percentage_discount: 15, quantity_threshold: 5) }
+  let!(:bulk_discount_3) {tyty.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 10) }
+  let!(:bulk_discount_4) {tyty.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 15) }
+
+  describe 'bulk discount show page' do
+    it 'has bulk discounts quantity threshold and percentage discount' do
+    visit merchant_bulk_discount_path(nomi, bulk_discount_1)
+
+    save_and_open_page
+
+      expect(page).to have_content('Naomi LLC')
+      expect(page).to have_content("Bulk Discount: ##{bulk_discount_1.id}")
+      expect(page).to have_content("Percentage Discount: #{bulk_discount_1.percentage_discount}%")
+      expect(page).to have_content("Quantity Needed: #{bulk_discount_1.quantity_threshold} ct.")
+    end
   end
 
 end
