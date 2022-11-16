@@ -90,5 +90,12 @@ RSpec.describe 'Invoice Show Page', type: :feature do
       expect(current_path).to eq(merchant_invoice_path(nomi, invoice_1))
       expect(invoice_item_1.reload.status).to eq('packaged')
     end
+
+    it 'has discount applied displayed if applicable' do 
+      visit merchant_invoice_path(nomi, invoice_1)
+
+      expect(page).to have_content('Discount Applied')
+      expect(page).to have_content('Discount Applied')
+    end
   end
 end
