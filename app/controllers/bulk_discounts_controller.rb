@@ -1,11 +1,11 @@
 class BulkDiscountsController < ApplicationController
-  before_action :holidays_information, only: [:index]
+  # before_action :holidays_information, only: [:index]
   
-  def holidays_information
-    @holidays = HolidaySearch.new.holiday_information[0..2]
-  end
+  # def holidays_information
+  # end
   
   def index 
+    @holidays = HolidaySearch.new.holiday_information[0..2]
     @merchant = Merchant.find(params[:merchant_id])
   end
   
