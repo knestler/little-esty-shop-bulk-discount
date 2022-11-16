@@ -97,5 +97,12 @@ RSpec.describe Invoice, type: :model do
         expect(invoice_6.discounted_revenue).to eq(1600)
       end
     end
+
+    describe '#invoice_items_with_discount' do
+      it 'returns the discount used for invoice item' do
+        expect(invoice_item_1.discount_used).to eq(bulk_discount_2)
+        expect(invoice_item_8.discount_used).to eq(bulk_discount_3)
+      end
+    end
   end
 end

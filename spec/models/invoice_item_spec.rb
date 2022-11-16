@@ -59,6 +59,10 @@ RSpec.describe InvoiceItem, type: :model do
 
   let!(:bulk_discount_1) {nomi.bulk_discounts.create!(percentage_discount: 10, quantity_threshold: 10) }
   let!(:bulk_discount_2) {nomi.bulk_discounts.create!(percentage_discount: 15, quantity_threshold: 20) }
+  # let!(:bulk_discount_5) {nomi.bulk_discounts.create!(percentage_discount: 0, quantity_threshold: 0) }
+  # let!(:bulk_discount_6) {nomi.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 5) }
+  # let!(:bulk_discount_7) {nomi.bulk_discounts.create!(percentage_discount: 25, quantity_threshold: 2) }
+
   let!(:bulk_discount_3) {tyty.bulk_discounts.create!(percentage_discount: 20, quantity_threshold: 10) }
   let!(:bulk_discount_4) {tyty.bulk_discounts.create!(percentage_discount: 30, quantity_threshold: 15) }
   
@@ -82,7 +86,15 @@ RSpec.describe InvoiceItem, type: :model do
         expect(InvoiceItem.uniq_invoice_items.count).to eq(7)
       end
     end 
-  end
 
+    describe '#discount_used' do
+      it 'returns the discount used for invoice item' do
+        expect(invoice_item_5.discount_used).to eq(nil)
+        expect(invoice_item_7.discount_used).to eq(bulk_discount_2)
+
+      end
+    end
+  
+  end 
 
 end
