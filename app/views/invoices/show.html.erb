@@ -24,13 +24,14 @@ td {
 <h3 id="invoice"><center>Invoice #<%= @invoice.id %></center></h3>
 
 <div id="info">
-  <p>Status: <%= @invoice.status %></p><br>
-  <p>Created on: <%= @invoice.created_at.strftime("%A, %B %d, %Y") %></p><br>
-  <p>Total Revenue: $<%= @invoice.my_total_revenue_formatter%></p><br>
-  <p>Total Discounted Revenue: $<%=@invoice.discounted_revenue%></p><br>
+  <p>Status: <%= @invoice.status %></p>
+  <p>Created on: <%= @invoice.created_at.strftime("%A, %B %d, %Y") %></p>
+  <p>Total Revenue: $<%= @invoice.my_total_revenue_formatter%></p>
+  <p>Total Discounted Revenue: $<%=@invoice.discounted_revenue.to_f%></p>
+
   <p>Customer:</p>
   <p style="text-indent:30px;"><%= @invoice.customer.first_name%> <%= @invoice.customer.last_name%></p>
-</div><br><br>
+</div><br>
 
 <section>
   <div id="items_on_this_invoice">
@@ -41,6 +42,7 @@ td {
         <th>Quantity</th>
         <th>Current Price</th>
         <th>Status</th>
+        <th>Discount Applied</th>
       </tr>
       <% @invoice.invoice_items.uniq_invoice_items.each do |invoice_item| %>
       <tr>
@@ -53,6 +55,11 @@ td {
           <%= f.submit 'Update Item Status', id: 'submit-button' %>
           <% end %>
         </td>
+          <%if invoice_item.discount_used != nil%>
+            <td><%= link_to invoice_item.discount_used.id, merchant_bulk_discount_path(@merchant, invoice_item.discount_used)  %> </td> #do not change to button.
+          <%else%>
+          <td> None </td>
+          <%end %>
       </tr>
       <% end %>
     </table>
