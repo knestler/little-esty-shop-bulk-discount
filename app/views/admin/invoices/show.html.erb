@@ -5,6 +5,7 @@
   <b>Invoice Status: </b><%= @invoice.status %><br><br>
   <b>Created on: </b><%= @invoice.created_at.strftime("%A, %B %d, %Y") %><br><br>
   <b>Total Revenue: </b>$<%= @invoice.my_total_revenue_formatter %><br><br>
+  <b>Total Discounted Revenue: </b>$<%=@invoice.discounted_revenue.to_f%></p><br>
   <b>Customer: </b><%= @invoice.customer.first_name%> <%= @invoice.customer.last_name%><br>
 </div><br>
 <section>
